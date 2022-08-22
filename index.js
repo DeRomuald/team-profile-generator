@@ -1,5 +1,5 @@
 //
-const inquirer = require ('inquier');
+const inquirer = require ('inquirer');
 
 const Engineer = require ('./lib/Engineer');
 const Intern = require ('./lib/Intern');
@@ -9,29 +9,28 @@ const templateData = require ('./src/page-template');
 const {writeFile, copyFile} = require('./src/generate-page');
 
 const dataArr = [];
-//
+//Manager Questions
 const managerQuestions = [
     {
         type: 'input',
         name: 'name',
-        message: "What is the team manager's name?",
+        message: "What is the Manager's name?",
         validate: (input) => {
             if (input !== "") {
                 return true;
             }
             else {
-                return "Please enter the name";
+                return "Name Required!";
             }
         }
     },
     {
         type: 'input',
         name: 'id',
-        message: "What is the team manager's id?",
+        message: "What is the Manager's ID#?",
         validate: (input) => {
-            // to make sure input is number and not an empty string
             if (isNaN(parseInt(input))) {
-                return 'Please enter an id number';
+                return 'ID # Required!';
             }
             return true;
         }
@@ -39,7 +38,7 @@ const managerQuestions = [
     {
         type: 'input',
         name: 'email',
-        message: "What is the team manager's email?",
+        message: "What is the Manager's email address?",
         validate: (email) => {
             let valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
             if (valid) {
@@ -51,43 +50,42 @@ const managerQuestions = [
     {
         type: 'input',
         name: 'officeNumber',
-        message: "What is the team manager's office number?",
+        message: "What is the Manager's office number?",
         validate: (input) => {
             if (isNaN(parseInt(input))) {
-                return 'Please enter an office number';
+                return 'Office Number Required!';
             }
             return true;
         }
     },
 ];
 
-// question for next step
-const addTeamOrFinishQuestion = [
+const addTeammate= [
     {
         type: 'list',
         name: 'choice',
-        choices: ['Engineer', 'Intern', 'Finish'],
+        choices: ['Manager','Engineer', 'Intern', 'Done'],
         message: "Would you like to add another teammate?",
     },
 ];
 
-// question for engineer
+//Engineer Questions
 const engineerQuestions = [
     {
         type: 'input',
         name: 'name',
-        message: "What is the team engineer's name?",
+        message: "What is the Engineer's name?",
         validate: (input) => {
-            return (!input) ? 'Please provide the name' : true;
+            return (!input) ? 'Name Required!' : true;
         }
     },
     {
         type: 'input',
         name: 'id',
-        message: "What is the team engineer's id?",
+        message: "What is the Engineer's ID#?",
         validate: (input) => {
             if (isNaN(parseInt(input))) {
-                return 'Please enter an id number';
+                return 'ID # Required!';
             }
             return true;
         }
@@ -95,7 +93,7 @@ const engineerQuestions = [
     {
         type: 'input',
         name: 'email',
-        message: "What is the team engineer's email?",
+        message: "What is the Engineer's email address?",
         validate: (email) => {
             let valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
             if (valid) {
@@ -107,30 +105,30 @@ const engineerQuestions = [
     {
         type: 'input',
         name: 'github',
-        message: "What is the team engineer's github?",
+        message: "What is the Engineer's github?",
         validate: (input) => {
-            return (!input) ? 'Please provide the github' : true;
+            return (!input) ? 'Github required!' : true;
         }
     },
 ];
 
-// question for intern
+// Intern Questions
 const internQuestions = [
     {
         type: 'input',
         name: 'name',
-        message: "What is the team intern's name?",
+        message: "What is the Intern's name?",
         validate: (input) => {
-            return (!input) ? 'Please provide the name' : true;
+            return (!input) ? 'Name Required!' : true;
         }
     },
     {
         type: 'input',
         name: 'id',
-        message: "What is the team intern's id?",
+        message: "What is the Intern's ID#?",
         validate: (input) => {
             if (isNaN(parseInt(input))) {
-                return 'Please enter an id number';
+                return 'ID # Required';
             }
             return true;
         }
@@ -138,7 +136,7 @@ const internQuestions = [
     {
         type: 'input',
         name: 'email',
-        message: "What is the team intern's email?",
+        message: "What is the Intern's email?",
         validate: (email) => {
             let valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
             if (valid) {
@@ -150,82 +148,78 @@ const internQuestions = [
     {
         type: 'input',
         name: 'school',
-        message: "What is the team interns's school name?",
+        message: "What school does the Intern attend?",
         validate: (input) => {
-            return (!input) ? 'Please provide the school name' : true;
+            return (!input) ? 'School Name Required!' : true;
         }
     },
 ];
 
-// check if the user want to add another teammate or finish the input.
-const addTeamOrFinish = () => {
-    return inquirer.prompt(addTeamOrFinishQuestion)
+//Switch cases for team members
+const addTeamMember = () => {
+    return inquirer.prompt(addTeammate)
         .then(answer => {
             switch (answer.choice) {
                 case 'Engineer':
                     // addEngineer();
-                    console.log('You chose Engineer');
+                    console.log('Engineer Selected');
                     addEngineer();
                     break;
+                case 'Manager':
+                        // addManager();
+                        console.log('Manager Selected');
+                        addManager();
+                        break;    
                 case 'Intern':
                     // addIntern();
-                    console.log('You chose Intern');
+                    console.log('Intern Selected');
                     addIntern();
                     break;
-                case 'Finish':
-                    // here needs to be added function of creating a html with all the stuff.
-                    writeFile(templateData(dataArray));
+                case 'Done':
+                    // writeFile Function
+                    writeFile(templateData(dataArr));
                     copyFile();
-                    console.log('You chose Finish. Check the dist folder');
+                    console.log('Done. Check the dist folder!');
                     break;
             }
         })
 };
 
-// will add manager function to run questions and get answers and continue ask question until diced to stop will present a html page and a copy of the style.css 
+//Add Manager Function
 const addManager = () => {
-    //clean the array before start
-    dataArray.length = 0;
+    dataArr.length = 0;
     return inquirer.prompt(managerQuestions)
         .then(answers => {
-            // destructure data by section
             const { name, id, email, officeNumber } = answers;
             const manager = new Manager(name, id, email, officeNumber);
-            dataArray.push(manager);
-            // console.log(manager);
-            addTeamOrFinish();
+            dataArr.push(manager);
+            addTeamMember();
         })
 };
 
-// add engineer function to run questions and get answers
+//Add Enigneer Function
 const addEngineer = () => {
     return inquirer.prompt(engineerQuestions)
         .then(answers => {
-            // console.log(answers);
-            // destructure  data by section
             const { name, id, email, github } = answers;
             const engineer = new Engineer(name, id, email, github);
-            dataArray.push(engineer);
-            // console.log(engineer);
-            addTeamOrFinish();
+            dataArr.push(engineer);
+            addTeamMember();
         })
 
 };
 
-// add intern function to run questions and get answers
+//Add Intern Function
 const addIntern = () => {
     return inquirer.prompt(internQuestions)
         .then(answers => {
-            // console.log(answers);
-            // destructure data by section
             const { name, id, email, school } = answers;
             const engineer = new Intern(name, id, email, school);
-            dataArray.push(engineer);
-            // console.log(engineer);
-            addTeamOrFinish();
+            dataArr.push(engineer);
+            addTeamMember();
         })
 }
-// Run the main function to build a html
+
 addManager();
 
 
