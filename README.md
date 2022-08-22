@@ -40,7 +40,7 @@ $ node index.js
 <img width="1440" alt="Screen Shot 2022-08-22 at 7 38 11 PM" src="https://user-images.githubusercontent.com/100550961/186038165-81561034-ba40-4fbd-a90e-b77a00505b02.png">
 
 
-You can  check the demo [here](file:///Users/DeRomuald/Downloads/Team%20Profile%20Generator.webm)
+You can  check the demo [here](https://file:///Users/DeRomuald/Downloads/Team%20Profile%20Generator.webm)
 
 
 ## Acknowledgements
